@@ -23,8 +23,10 @@ Video vertical estilo redes sociales (2026: ritmo rápido, mucha dopamina) con:
 
 ```bash
 npx remotion render RutasAereas out/rutas-aereas.mp4
-# Recomendado: normalizar loudness para redes sociales (-14 LUFS)
-ffmpeg -i out/rutas-aereas.mp4 -c:v copy -af "loudnorm=I=-14:TP=-1.5:LRA=11" -c:a aac -b:a 256k out/rutas-aereas-final.mp4
+# Recomendado: normalizar loudness para redes sociales (-14 LUFS).
+# Importante: fijar -ar 48000, porque loudnorm sube la frecuencia de muestreo
+# y el AAC a 96/192 kHz no se reproduce en muchos navegadores (se oye silencio).
+ffmpeg -i out/rutas-aereas.mp4 -c:v copy -af "loudnorm=I=-14:TP=-1.5:LRA=11" -c:a aac -ar 48000 -b:a 192k out/rutas-aereas-final.mp4
 ```
 
 Para regenerar la narración (requiere `pip install edge-tts`), edita los textos y vuelve a medir duraciones en `src/data/aerial.ts`.
