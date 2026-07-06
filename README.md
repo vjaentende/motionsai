@@ -6,20 +6,20 @@ Proyecto de **motion videos** con [Remotion](https://www.remotion.dev/) — crea
 
 | ID | Formato | Descripción |
 |---|---|---|
-| `RutasAereas` | 1080×1920 | Video narrado (~99s): las rutas aéreas más usadas del mundo, con voz en español, música y transiciones rápidas |
+| `RutasAereas` | 1920×1080 | Video narrado (~102s) estilo corporativo: las rutas aéreas más transitadas del mundo, con voz en español y globo terráqueo 3D |
 | `IntroTitle` | 1920×1080 | Intro con título animado y gradientes |
 | `TextReveal` | 1920×1080 | Tipografía cinética palabra por palabra |
 | `SocialPromo` | 1080×1080 | Promo cuadrada para redes sociales |
 
 ### RutasAereas
 
-Video vertical estilo redes sociales (2026: ritmo rápido, mucha dopamina) con:
+Video 16:9 con estética corporativa (apto para presentaciones e inversores):
 
-- **Narración en español** generada con TTS neuronal (`edge-tts`, voz es-ES-Álvaro), archivos en `public/audio/`
+- **Video final listo para usar**: [`renders/rutas-aereas.mp4`](renders/rutas-aereas.mp4)
+- **Narración en español** con tono profesional, generada con TTS neuronal (`edge-tts`, voz es-ES-Álvaro), archivos en `public/audio/`
 - **9 escenas** con datos reales de OAG 2025: Jeju–Seúl (#1 mundial), Japón, Hanói–Ho Chi Minh, Hong Kong–Taipéi (#1 internacional), El Cairo–Yeda, Kuala Lumpur–Singapur y JFK–Londres
 - **Globo terráqueo 3D** (proyección ortográfica con `d3-geo` + datos reales de continentes) con la cámara siguiendo al avión mientras vuela de aeropuerto a aeropuerto por el gran círculo
-- **Animaciones**: zoom de impacto con micro-shake, contadores con overshoot, partículas y transiciones slide/fade con whoosh
-- **Música de fondo** sintetizada y efectos de transición
+- **Diseño sobrio**: fondo azul marino, acento dorado, tarjetas con bordes finos, transiciones de fundido y música ambiental sutil
 
 ```bash
 npx remotion render RutasAereas out/rutas-aereas.mp4
