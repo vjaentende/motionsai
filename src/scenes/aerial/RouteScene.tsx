@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill, Audio, Sequence, staticFile } from "remotion";
-import { RouteInfo } from "../../data/aerial";
-import { FlightArc } from "./FlightArc";
+import { narrationFrames, RouteInfo } from "../../data/aerial";
+import { Globe } from "./Globe";
 import { CountUp, PunchIn, SceneBackground, SlideUp } from "./ui";
 
 const AirportCode: React.FC<{
@@ -44,11 +44,11 @@ export const RouteScene: React.FC<{ route: RouteInfo }> = ({ route }) => {
     <AbsoluteFill style={{ fontFamily: "Archivo, sans-serif" }}>
       <SceneBackground gradient={route.gradient} seed={route.id} />
       <Sequence from={6}>
-        <Audio src={staticFile(`audio/${route.id}.mp3`)} />
+        <Audio src={staticFile(`audio/${route.id}.mp3`)} volume={1.5} />
       </Sequence>
 
       <PunchIn>
-        <AbsoluteFill style={{ padding: "150px 70px", justifyContent: "space-between" }}>
+        <AbsoluteFill style={{ padding: "140px 70px", justifyContent: "space-between" }}>
           <SlideUp delay={2}>
             <div
               style={{
@@ -74,7 +74,7 @@ export const RouteScene: React.FC<{ route: RouteInfo }> = ({ route }) => {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "flex-end",
-                marginBottom: -60,
+                marginBottom: 10,
               }}
             >
               <AirportCode
@@ -90,9 +90,18 @@ export const RouteScene: React.FC<{ route: RouteInfo }> = ({ route }) => {
                 align="right"
               />
             </div>
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <FlightArc accent={route.accent} delay={14} />
-            </div>
+            <SlideUp delay={10} distance={50}>
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <Globe
+                  origin={route.origin.coords}
+                  dest={route.dest.coords}
+                  accent={route.accent}
+                  size={830}
+                  delay={16}
+                  flightFrames={Math.max(70, narrationFrames(route.id) - 55)}
+                />
+              </div>
+            </SlideUp>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 34 }}>
@@ -103,7 +112,7 @@ export const RouteScene: React.FC<{ route: RouteInfo }> = ({ route }) => {
                   delay={22}
                   suffix="M"
                   style={{
-                    fontSize: 210,
+                    fontSize: 170,
                     fontWeight: 900,
                     color: "white",
                     lineHeight: 0.9,

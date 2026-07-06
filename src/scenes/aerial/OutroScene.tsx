@@ -23,7 +23,7 @@ export const OutroScene: React.FC = () => {
     <AbsoluteFill style={{ fontFamily: "Archivo, sans-serif" }}>
       <SceneBackground gradient={["#0f172a", "#6d28d9"]} seed="outro" />
       <Sequence from={4}>
-        <Audio src={staticFile("audio/outro.mp3")} />
+        <Audio src={staticFile("audio/outro.mp3")} volume={1.5} />
       </Sequence>
 
       <PunchIn>

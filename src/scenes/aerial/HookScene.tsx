@@ -28,7 +28,7 @@ export const HookScene: React.FC = () => {
     <AbsoluteFill style={{ fontFamily: "Archivo, sans-serif" }}>
       <SceneBackground gradient={["#020617", "#4f46e5"]} seed="hook" />
       <Sequence from={6}>
-        <Audio src={staticFile("audio/hook.mp3")} />
+        <Audio src={staticFile("audio/hook.mp3")} volume={1.5} />
       </Sequence>
 
       <div

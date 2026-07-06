@@ -69,7 +69,7 @@ export const JapanScene: React.FC = () => {
     <AbsoluteFill style={{ fontFamily: "Archivo, sans-serif" }}>
       <SceneBackground gradient={["#4c0519", "#e11d48"]} seed="japon" />
       <Sequence from={6}>
-        <Audio src={staticFile("audio/japon.mp3")} />
+        <Audio src={staticFile("audio/japon.mp3")} volume={1.5} />
       </Sequence>
 
       <PunchIn>

@@ -37,11 +37,17 @@ export const totalDuration = (): number =>
   SCENE_IDS.reduce((sum, id) => sum + sceneDuration(id), 0) -
   (SCENE_IDS.length - 1) * TRANSITION_FRAMES;
 
+export type Airport = {
+  code: string;
+  city: string;
+  coords: [number, number]; // [lon, lat]
+};
+
 export type RouteInfo = {
   id: string;
   rankLabel: string;
-  origin: { code: string; city: string };
-  dest: { code: string; city: string };
+  origin: Airport;
+  dest: Airport;
   seats: number; // millones
   flightTime: string;
   fact: string;
@@ -53,8 +59,8 @@ export const ROUTES: Record<string, RouteInfo> = {
   jeju: {
     id: "jeju",
     rankLabel: "#1 DEL MUNDO",
-    origin: { code: "CJU", city: "Jeju" },
-    dest: { code: "GMP", city: "Seúl" },
+    origin: { code: "CJU", city: "Jeju", coords: [126.49, 33.51] },
+    dest: { code: "GMP", city: "Seúl", coords: [126.79, 37.56] },
     seats: 14.5,
     flightTime: "1h 10m",
     fact: "En horas punta despega un avión cada 2 minutos. Un autobús con alas.",
@@ -64,8 +70,8 @@ export const ROUTES: Record<string, RouteInfo> = {
   hanoi: {
     id: "hanoi",
     rankLabel: "#4 DEL MUNDO",
-    origin: { code: "HAN", city: "Hanói" },
-    dest: { code: "SGN", city: "Ho Chi Minh" },
+    origin: { code: "HAN", city: "Hanói", coords: [105.8, 21.22] },
+    dest: { code: "SGN", city: "Ho Chi Minh", coords: [106.65, 10.82] },
     seats: 11.1,
     flightTime: "2h 05m",
     fact: "Crece un +4% cada año. Vietnam vuela más que nunca.",
@@ -75,8 +81,8 @@ export const ROUTES: Record<string, RouteInfo> = {
   hongkong: {
     id: "hongkong",
     rankLabel: "#1 INTERNACIONAL",
-    origin: { code: "HKG", city: "Hong Kong" },
-    dest: { code: "TPE", city: "Taipéi" },
+    origin: { code: "HKG", city: "Hong Kong", coords: [113.91, 22.31] },
+    dest: { code: "TPE", city: "Taipéi", coords: [121.23, 25.08] },
     seats: 6.8,
     flightTime: "1h 55m",
     fact: "La reina indiscutible de las rutas internacionales, año tras año.",
@@ -86,8 +92,8 @@ export const ROUTES: Record<string, RouteInfo> = {
   cairo: {
     id: "cairo",
     rankLabel: "#2 INTERNACIONAL",
-    origin: { code: "CAI", city: "El Cairo" },
-    dest: { code: "JED", city: "Yeda" },
+    origin: { code: "CAI", city: "El Cairo", coords: [31.41, 30.12] },
+    dest: { code: "JED", city: "Yeda", coords: [39.15, 21.68] },
     seats: 5.8,
     flightTime: "2h 25m",
     fact: "Impulsada por la peregrinación a La Meca, sobre el Mar Rojo.",
@@ -97,8 +103,8 @@ export const ROUTES: Record<string, RouteInfo> = {
   kuala: {
     id: "kuala",
     rankLabel: "#3 INTERNACIONAL",
-    origin: { code: "KUL", city: "Kuala Lumpur" },
-    dest: { code: "SIN", city: "Singapur" },
+    origin: { code: "KUL", city: "Kuala Lumpur", coords: [101.71, 2.75] },
+    dest: { code: "SIN", city: "Singapur", coords: [103.99, 1.36] },
     seats: 5.6,
     flightTime: "1h 05m",
     fact: "Cambiar de país en menos de lo que tardas en llegar al trabajo.",
@@ -108,8 +114,8 @@ export const ROUTES: Record<string, RouteInfo> = {
   jfk: {
     id: "jfk",
     rankLabel: "ÚNICA INTERCONTINENTAL",
-    origin: { code: "JFK", city: "Nueva York" },
-    dest: { code: "LHR", city: "Londres" },
+    origin: { code: "JFK", city: "Nueva York", coords: [-73.78, 40.64] },
+    dest: { code: "LHR", city: "Londres", coords: [-0.46, 51.47] },
     seats: 4.0,
     flightTime: "7h 00m",
     fact: "Récord con jet stream: cruzó el Atlántico en 4h 56m.",
