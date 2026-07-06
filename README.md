@@ -6,9 +6,25 @@ Proyecto de **motion videos** con [Remotion](https://www.remotion.dev/) — crea
 
 | ID | Formato | Descripción |
 |---|---|---|
+| `RutasAereas` | 1080×1920 | Video narrado (~99s): las rutas aéreas más usadas del mundo, con voz en español, música y transiciones rápidas |
 | `IntroTitle` | 1920×1080 | Intro con título animado y gradientes |
 | `TextReveal` | 1920×1080 | Tipografía cinética palabra por palabra |
 | `SocialPromo` | 1080×1080 | Promo cuadrada para redes sociales |
+
+### RutasAereas
+
+Video vertical estilo redes sociales (2026: ritmo rápido, mucha dopamina) con:
+
+- **Narración en español** generada con TTS neuronal (`edge-tts`, voz es-ES-Álvaro), archivos en `public/audio/`
+- **9 escenas** con datos reales de OAG 2025: Jeju–Seúl (#1 mundial), Japón, Hanói–Ho Chi Minh, Hong Kong–Taipéi (#1 internacional), El Cairo–Yeda, Kuala Lumpur–Singapur y JFK–Londres
+- **Animaciones**: zoom de impacto con micro-shake, arcos de vuelo SVG con avión en movimiento, contadores con overshoot, partículas y transiciones slide/fade con whoosh
+- **Música de fondo** sintetizada y efectos de transición
+
+```bash
+npx remotion render RutasAereas out/rutas-aereas.mp4
+```
+
+Para regenerar la narración (requiere `pip install edge-tts`), edita los textos y vuelve a medir duraciones en `src/data/aerial.ts`.
 
 ## Comandos
 

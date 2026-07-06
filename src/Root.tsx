@@ -1,5 +1,7 @@
 import "./index.css";
 import { Composition } from "remotion";
+import { AerialRoutes } from "./AerialRoutes";
+import { totalDuration } from "./data/aerial";
 import { IntroTitle } from "./components/IntroTitle";
 import { SocialPromo } from "./components/SocialPromo";
 import { TextReveal } from "./components/TextReveal";
@@ -7,6 +9,14 @@ import { TextReveal } from "./components/TextReveal";
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      <Composition
+        id="RutasAereas"
+        component={AerialRoutes}
+        durationInFrames={totalDuration()}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
       <Composition
         id="IntroTitle"
         component={IntroTitle}
