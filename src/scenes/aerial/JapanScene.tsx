@@ -1,7 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Audio, Sequence, staticFile } from "remotion";
-import { COLORS } from "../../data/aerial";
-import { CountUp, Overline, SceneBackground, SceneIn, SlideUp } from "./ui";
+import { CountUp, PunchIn, SceneBackground, SlideUp } from "./ui";
 
 const RouteRow: React.FC<{
   from: string;
@@ -11,73 +10,56 @@ const RouteRow: React.FC<{
   rank: string;
   delay: number;
 }> = ({ from, to, codes, seats, rank, delay }) => (
-  <SlideUp delay={delay}>
+  <SlideUp delay={delay} distance={110}>
     <div
       style={{
-        background: COLORS.surface,
-        border: `1px solid ${COLORS.hairline}`,
-        borderRadius: 16,
-        padding: "40px 52px",
+        background: "rgba(255,255,255,0.1)",
+        border: "2px solid rgba(255,255,255,0.22)",
+        borderRadius: 36,
+        padding: "40px 46px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        gap: 40,
+        gap: 26,
       }}
     >
       <div>
-        <p
-          style={{
-            fontSize: 24,
-            fontWeight: 600,
-            color: COLORS.accent,
-            letterSpacing: "0.2em",
-            textTransform: "uppercase",
-            marginBottom: 12,
-          }}
-        >
+        <p style={{ fontSize: 32, fontWeight: 800, color: "#fda4af", letterSpacing: "0.1em" }}>
           {rank}
         </p>
-        <p style={{ fontSize: 58, fontWeight: 700, color: COLORS.text, lineHeight: 1.1 }}>
-          {from}
-          <span style={{ color: COLORS.textSecondary, fontWeight: 400 }}> — </span>
-          {to}
+        <p
+          style={{
+            fontSize: 58,
+            fontWeight: 900,
+            color: "white",
+            lineHeight: 1.05,
+            whiteSpace: "nowrap",
+          }}
+        >
+          {from} → {to}
         </p>
         <p
           style={{
-            fontSize: 26,
-            fontWeight: 500,
-            color: COLORS.textSecondary,
-            letterSpacing: "0.18em",
-            marginTop: 10,
+            fontSize: 30,
+            fontWeight: 700,
+            color: "rgba(255,255,255,0.6)",
+            letterSpacing: "0.14em",
           }}
         >
           {codes}
         </p>
       </div>
-      <div style={{ textAlign: "right" }}>
-        <CountUp
-          target={seats}
-          delay={delay + 8}
-          suffix="M"
-          style={{
-            fontSize: 96,
-            fontWeight: 700,
-            color: COLORS.text,
-            letterSpacing: "-0.02em",
-          }}
-        />
-        <p
-          style={{
-            fontSize: 22,
-            fontWeight: 500,
-            color: COLORS.textSecondary,
-            textTransform: "uppercase",
-            letterSpacing: "0.16em",
-          }}
-        >
-          asientos anuales
-        </p>
-      </div>
+      <CountUp
+        target={seats}
+        delay={delay + 6}
+        suffix="M"
+        style={{
+          fontSize: 100,
+          fontWeight: 900,
+          color: "white",
+          textShadow: "0 0 60px rgba(244,63,94,0.7)",
+        }}
+      />
     </div>
   </SlideUp>
 );
@@ -85,83 +67,67 @@ const RouteRow: React.FC<{
 export const JapanScene: React.FC = () => {
   return (
     <AbsoluteFill style={{ fontFamily: "Archivo, sans-serif" }}>
-      <SceneBackground />
-      <Sequence from={6}>
+      <SceneBackground gradient={["#4c0519", "#e11d48"]} seed="japon" />
+      <Sequence from={5}>
         <Audio src={staticFile("audio/japon.mp3")} volume={1.5} />
       </Sequence>
 
-      <SceneIn>
-        <AbsoluteFill style={{ flexDirection: "row", padding: "100px 100px" }}>
-          <div
-            style={{
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              gap: 44,
-              paddingRight: 80,
-            }}
-          >
-            <SlideUp delay={4}>
-              <Overline>Mercado doméstico · Japón</Overline>
-            </SlideUp>
-            <SlideUp delay={12}>
-              <h2
-                style={{
-                  fontSize: 92,
-                  fontWeight: 700,
-                  color: COLORS.text,
-                  lineHeight: 1.1,
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                Japón concentra el segundo y tercer corredor mundial
-              </h2>
-            </SlideUp>
-            <SlideUp delay={24}>
-              <p
-                style={{
-                  fontSize: 34,
-                  fontWeight: 400,
-                  color: COLORS.textSecondary,
-                  lineHeight: 1.5,
-                  maxWidth: 700,
-                }}
-              >
-                El avión compite directamente con el tren de alta velocidad, a
-                menudo con tarifas más competitivas.
-              </p>
-            </SlideUp>
-          </div>
+      <PunchIn>
+        <AbsoluteFill style={{ padding: "150px 70px", gap: 55, justifyContent: "center" }}>
+          <SlideUp delay={2}>
+            <h2
+              style={{
+                fontSize: 118,
+                fontWeight: 900,
+                color: "white",
+                letterSpacing: "-0.03em",
+                textShadow: "0 12px 60px rgba(0,0,0,0.55)",
+              }}
+            >
+              JAPÓN
+              <span style={{ color: "#fda4af" }}> REVIENTA EL PODIO</span>
+            </h2>
+          </SlideUp>
 
-          <div
-            style={{
-              width: 860,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              gap: 32,
-            }}
-          >
+          <div style={{ display: "flex", flexDirection: "column", gap: 36 }}>
             <RouteRow
               from="Sapporo"
               to="Tokio"
-              codes="CTS — HND"
+              codes="CTS → HND"
               seats={12.1}
-              rank="#2 mundial"
-              delay={16}
+              rank="#2 DEL MUNDO"
+              delay={10}
             />
             <RouteRow
               from="Fukuoka"
               to="Tokio"
-              codes="FUK — HND"
+              codes="FUK → HND"
               seats={11.5}
-              rank="#3 mundial"
-              delay={26}
+              rank="#3 DEL MUNDO"
+              delay={18}
             />
           </div>
+
+          <SlideUp delay={45}>
+            <div
+              style={{
+                background: "linear-gradient(135deg, rgba(253,164,175,0.25), rgba(255,255,255,0.06))",
+                border: "2px solid rgba(253,164,175,0.5)",
+                borderRadius: 32,
+                padding: "34px 42px",
+              }}
+            >
+              <p style={{ fontSize: 46, fontWeight: 700, color: "white", lineHeight: 1.3 }}>
+                El avión ahí es
+                <span style={{ color: "#fda4af", fontWeight: 900 }}>
+                  {" "}
+                  más barato que el tren bala.
+                </span>
+              </p>
+            </div>
+          </SlideUp>
         </AbsoluteFill>
-      </SceneIn>
+      </PunchIn>
     </AbsoluteFill>
   );
 };
