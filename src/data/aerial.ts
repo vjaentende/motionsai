@@ -1,18 +1,28 @@
 export const FPS = 30;
-export const TRANSITION_FRAMES = 14;
-export const SCENE_PADDING = 40;
+export const TRANSITION_FRAMES = 12;
+export const SCENE_PADDING = 34;
+
+// Paleta corporativa
+export const COLORS = {
+  background: "#0B0F17",
+  surface: "rgba(255,255,255,0.04)",
+  hairline: "rgba(255,255,255,0.12)",
+  text: "#E8EAF0",
+  textSecondary: "#8A93A6",
+  accent: "#C9A961",
+};
 
 // Duración real de cada mp3 de narración (segundos), medida con ffprobe
 const NARRATION_SECONDS: Record<string, number> = {
-  hook: 9.144,
-  jeju: 15.48,
-  japon: 13.512,
-  hanoi: 7.632,
-  hongkong: 10.296,
-  cairo: 8.304,
-  kuala: 9.096,
-  jfk: 12.936,
-  outro: 3.84,
+  hook: 12.192,
+  jeju: 13.272,
+  japon: 16.368,
+  hanoi: 8.376,
+  hongkong: 8.304,
+  cairo: 7.776,
+  kuala: 7.704,
+  jfk: 14.232,
+  outro: 6.984,
 };
 
 export const narrationFrames = (id: string): number =>
@@ -51,75 +61,61 @@ export type RouteInfo = {
   seats: number; // millones
   flightTime: string;
   fact: string;
-  gradient: [string, string];
-  accent: string;
 };
 
 export const ROUTES: Record<string, RouteInfo> = {
   jeju: {
     id: "jeju",
-    rankLabel: "#1 DEL MUNDO",
+    rankLabel: "Ruta doméstica · #1 mundial",
     origin: { code: "CJU", city: "Jeju", coords: [126.49, 33.51] },
     dest: { code: "GMP", city: "Seúl", coords: [126.79, 37.56] },
     seats: 14.5,
-    flightTime: "1h 10m",
-    fact: "En horas punta despega un avión cada 2 minutos. Un autobús con alas.",
-    gradient: ["#1e1b4b", "#7c3aed"],
-    accent: "#c4b5fd",
+    flightTime: "1 h 10 min",
+    fact: "Despegues cada pocos minutos en horas punta.",
   },
   hanoi: {
     id: "hanoi",
-    rankLabel: "#4 DEL MUNDO",
+    rankLabel: "Ruta doméstica · #4 mundial",
     origin: { code: "HAN", city: "Hanói", coords: [105.8, 21.22] },
     dest: { code: "SGN", city: "Ho Chi Minh", coords: [106.65, 10.82] },
     seats: 11.1,
-    flightTime: "2h 05m",
-    fact: "Crece un +4% cada año. Vietnam vuela más que nunca.",
-    gradient: ["#7f1d1d", "#f97316"],
-    accent: "#fed7aa",
+    flightTime: "2 h 05 min",
+    fact: "Crecimiento anual del +4 % en capacidad.",
   },
   hongkong: {
     id: "hongkong",
-    rankLabel: "#1 INTERNACIONAL",
+    rankLabel: "Ruta internacional · #1",
     origin: { code: "HKG", city: "Hong Kong", coords: [113.91, 22.31] },
     dest: { code: "TPE", city: "Taipéi", coords: [121.23, 25.08] },
     seats: 6.8,
-    flightTime: "1h 55m",
-    fact: "La reina indiscutible de las rutas internacionales, año tras año.",
-    gradient: ["#0c4a6e", "#06b6d4"],
-    accent: "#a5f3fc",
+    flightTime: "1 h 55 min",
+    fact: "Líder internacional por segundo año consecutivo.",
   },
   cairo: {
     id: "cairo",
-    rankLabel: "#2 INTERNACIONAL",
+    rankLabel: "Ruta internacional · #2",
     origin: { code: "CAI", city: "El Cairo", coords: [31.41, 30.12] },
     dest: { code: "JED", city: "Yeda", coords: [39.15, 21.68] },
     seats: 5.8,
-    flightTime: "2h 25m",
-    fact: "Impulsada por la peregrinación a La Meca, sobre el Mar Rojo.",
-    gradient: ["#78350f", "#eab308"],
-    accent: "#fde68a",
+    flightTime: "2 h 25 min",
+    fact: "Impulsada por el tráfico religioso hacia La Meca.",
   },
   kuala: {
     id: "kuala",
-    rankLabel: "#3 INTERNACIONAL",
+    rankLabel: "Ruta internacional · #3",
     origin: { code: "KUL", city: "Kuala Lumpur", coords: [101.71, 2.75] },
     dest: { code: "SIN", city: "Singapur", coords: [103.99, 1.36] },
     seats: 5.6,
-    flightTime: "1h 05m",
-    fact: "Cambiar de país en menos de lo que tardas en llegar al trabajo.",
-    gradient: ["#14532d", "#22c55e"],
-    accent: "#bbf7d0",
+    flightTime: "1 h 05 min",
+    fact: "Uno de los cruces fronterizos aéreos más cortos del mundo.",
   },
   jfk: {
     id: "jfk",
-    rankLabel: "ÚNICA INTERCONTINENTAL",
+    rankLabel: "Única intercontinental del top",
     origin: { code: "JFK", city: "Nueva York", coords: [-73.78, 40.64] },
     dest: { code: "LHR", city: "Londres", coords: [-0.46, 51.47] },
     seats: 4.0,
-    flightTime: "7h 00m",
-    fact: "Récord con jet stream: cruzó el Atlántico en 4h 56m.",
-    gradient: ["#1e3a8a", "#ec4899"],
-    accent: "#fbcfe8",
+    flightTime: "7 h 00 min",
+    fact: "Récord con jet stream: 4 h 56 min de travesía.",
   },
 };

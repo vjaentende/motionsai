@@ -1,80 +1,76 @@
 import React from "react";
-import {
-  AbsoluteFill,
-  Audio,
-  interpolate,
-  Sequence,
-  spring,
-  staticFile,
-  useCurrentFrame,
-  useVideoConfig,
-} from "remotion";
-import { PlaneIcon, PunchIn, SceneBackground } from "./ui";
+import { AbsoluteFill, Audio, Sequence, staticFile } from "remotion";
+import { COLORS } from "../../data/aerial";
+import { PlaneIcon, SceneBackground, SceneIn, SlideUp } from "./ui";
 
 export const OutroScene: React.FC = () => {
-  const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-
-  const pop = spring({ frame: frame - 6, fps, config: { damping: 11, stiffness: 160 } });
-  const ringScale = interpolate(frame % 40, [0, 40], [1, 1.9]);
-  const ringOpacity = interpolate(frame % 40, [0, 40], [0.6, 0]);
-
   return (
     <AbsoluteFill style={{ fontFamily: "Archivo, sans-serif" }}>
-      <SceneBackground gradient={["#0f172a", "#6d28d9"]} seed="outro" />
+      <SceneBackground />
       <Sequence from={4}>
         <Audio src={staticFile("audio/outro.mp3")} volume={1.5} />
       </Sequence>
 
-      <PunchIn>
-        <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", gap: 56 }}>
-          <div style={{ position: "relative" }}>
+      <SceneIn>
+        <AbsoluteFill
+          style={{ justifyContent: "center", alignItems: "center", gap: 48 }}
+        >
+          <SlideUp delay={6}>
             <div
               style={{
-                position: "absolute",
-                inset: -30,
+                width: 108,
+                height: 108,
                 borderRadius: "50%",
-                border: "4px solid #c4b5fd",
-                transform: `scale(${ringScale})`,
-                opacity: ringOpacity,
-              }}
-            />
-            <div
-              style={{
-                width: 220,
-                height: 220,
-                borderRadius: "50%",
-                background: "linear-gradient(135deg, #8b5cf6, #ec4899)",
+                border: `1px solid ${COLORS.hairline}`,
+                background: COLORS.surface,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                transform: `scale(${interpolate(pop, [0, 1], [0, 1])})`,
-                boxShadow: "0 0 90px rgba(139,92,246,0.8)",
               }}
             >
-              <PlaneIcon size={120} color="white" rotate={45} />
+              <PlaneIcon size={52} color={COLORS.accent} rotate={45} />
             </div>
-          </div>
+          </SlideUp>
 
-          <h2
-            style={{
-              fontSize: 92,
-              fontWeight: 900,
-              color: "white",
-              textAlign: "center",
-              lineHeight: 1.1,
-              padding: "0 70px",
-              transform: `translateY(${interpolate(pop, [0, 1], [60, 0])}px)`,
-              opacity: pop,
-              textShadow: "0 12px 60px rgba(0,0,0,0.6)",
-            }}
-          >
-            SÍGUEME PARA
-            <br />
-            <span style={{ color: "#c4b5fd" }}>MÁS DATOS DE AVIACIÓN</span>
-          </h2>
+          <SlideUp delay={14}>
+            <h2
+              style={{
+                fontSize: 84,
+                fontWeight: 700,
+                color: COLORS.text,
+                textAlign: "center",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              Gracias por su atención
+            </h2>
+          </SlideUp>
+
+          <SlideUp delay={24}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 24,
+              }}
+            >
+              <div style={{ width: 44, height: 1, background: COLORS.hairline }} />
+              <p
+                style={{
+                  fontSize: 27,
+                  fontWeight: 500,
+                  color: COLORS.textSecondary,
+                  letterSpacing: "0.22em",
+                  textTransform: "uppercase",
+                }}
+              >
+                Fuente: OAG · Capacidad programada 2025
+              </p>
+              <div style={{ width: 44, height: 1, background: COLORS.hairline }} />
+            </div>
+          </SlideUp>
         </AbsoluteFill>
-      </PunchIn>
+      </SceneIn>
     </AbsoluteFill>
   );
 };

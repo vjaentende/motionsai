@@ -11,6 +11,7 @@ import { feature } from "topojson-client";
 import type { FeatureCollection, MultiPolygon, Polygon } from "geojson";
 import type { Topology, GeometryCollection } from "topojson-specification";
 import landTopo from "../../data/land-110m.json";
+import { COLORS } from "../../data/aerial";
 import { PlaneIcon } from "./ui";
 
 const topology = landTopo as unknown as Topology<{
@@ -23,16 +24,15 @@ const LAND = feature(
 
 const GRATICULE = geoGraticule().step([15, 15])();
 
-const easeOut = (t: number) => 1 - (1 - t) ** 2.6;
+const easeOut = (t: number) => 1 - (1 - t) ** 2.4;
 
 export const Globe: React.FC<{
   origin: [number, number];
   dest: [number, number];
-  accent: string;
   size?: number;
   delay?: number;
   flightFrames?: number;
-}> = ({ origin, dest, accent, size = 940, delay = 14, flightFrames = 85 }) => {
+}> = ({ origin, dest, size = 860, delay = 14, flightFrames = 85 }) => {
   const frame = useCurrentFrame();
 
   const rawProgress = interpolate(frame - delay, [0, flightFrames], [0, 1], {
@@ -49,13 +49,13 @@ export const Globe: React.FC<{
 
   // La cámara sigue al avión a lo largo del gran círculo
   const camera = interpolator(progress);
-  const wobble = Math.sin(frame / 55) * 2;
+  const wobble = Math.sin(frame / 70) * 1.2;
 
   const projection = useMemo(
     () =>
       geoOrthographic()
         .translate([size / 2, size / 2])
-        .scale((size / 2 - 30) * zoom)
+        .scale((size / 2 - 26) * zoom)
         .clipAngle(90),
     [size, zoom],
   );
@@ -63,12 +63,10 @@ export const Globe: React.FC<{
 
   const path = geoPath(projection);
 
-  // Ruta recorrida hasta ahora (gran círculo muestreado)
   const SAMPLES = 80;
   const traveled: [number, number][] = [];
   for (let i = 0; i <= SAMPLES; i++) {
-    const t = (i / SAMPLES) * progress;
-    traveled.push(interpolator(t));
+    traveled.push(interpolator((i / SAMPLES) * progress));
   }
   const fullRoute: [number, number][] = [];
   for (let i = 0; i <= SAMPLES; i++) {
@@ -78,7 +76,6 @@ export const Globe: React.FC<{
   const traveledPath = path({ type: "LineString", coordinates: traveled });
   const fullRoutePath = path({ type: "LineString", coordinates: fullRoute });
 
-  // Posición y rumbo del avión en pantalla
   const planePos = projection(interpolator(progress));
   const ahead = projection(interpolator(Math.min(1, progress + 0.02)));
   const planeAngle =
@@ -92,9 +89,8 @@ export const Globe: React.FC<{
   const originPos = isVisible(origin) ? projection(origin) : null;
   const destPos = isVisible(dest) ? projection(dest) : null;
 
-  const pulse = 1 + 0.25 * Math.sin(frame / 5);
   const arrived = rawProgress >= 0.995;
-  const globeR = (size / 2 - 30) * zoom;
+  const globeR = (size / 2 - 26) * zoom;
 
   return (
     <svg
@@ -104,15 +100,10 @@ export const Globe: React.FC<{
       style={{ overflow: "hidden", borderRadius: "50%" }}
     >
       <defs>
-        <radialGradient id="ocean" cx="38%" cy="30%">
-          <stop offset="0%" stopColor="rgba(56,88,180,0.95)" />
-          <stop offset="55%" stopColor="rgba(16,30,80,0.98)" />
-          <stop offset="100%" stopColor="rgba(4,10,34,1)" />
-        </radialGradient>
-        <radialGradient id="atmo" cx="50%" cy="50%">
-          <stop offset="78%" stopColor="rgba(120,170,255,0)" />
-          <stop offset="94%" stopColor="rgba(120,170,255,0.35)" />
-          <stop offset="100%" stopColor="rgba(160,200,255,0.7)" />
+        <radialGradient id="ocean" cx="42%" cy="34%">
+          <stop offset="0%" stopColor="#1B2436" />
+          <stop offset="60%" stopColor="#121A2A" />
+          <stop offset="100%" stopColor="#0A0F1B" />
         </radialGradient>
       </defs>
 
@@ -128,16 +119,16 @@ export const Globe: React.FC<{
       <path
         d={path(GRATICULE) ?? undefined}
         fill="none"
-        stroke="rgba(150,180,255,0.16)"
-        strokeWidth={1.2}
+        stroke="rgba(255,255,255,0.07)"
+        strokeWidth={1}
       />
 
       {/* Continentes */}
       <path
         d={path(LAND) ?? undefined}
-        fill="rgba(94,140,255,0.34)"
-        stroke="rgba(170,200,255,0.75)"
-        strokeWidth={1.6}
+        fill="#26334B"
+        stroke="rgba(190,205,230,0.4)"
+        strokeWidth={1.2}
       />
 
       {/* Ruta completa punteada */}
@@ -145,22 +136,22 @@ export const Globe: React.FC<{
         <path
           d={fullRoutePath}
           fill="none"
-          stroke="rgba(255,255,255,0.28)"
-          strokeWidth={5}
-          strokeDasharray="3 16"
+          stroke="rgba(255,255,255,0.22)"
+          strokeWidth={3}
+          strokeDasharray="2 12"
           strokeLinecap="round"
         />
       )}
 
-      {/* Ruta recorrida con glow */}
+      {/* Ruta recorrida */}
       {traveledPath && progress > 0.005 && (
         <path
           d={traveledPath}
           fill="none"
-          stroke={accent}
-          strokeWidth={8}
+          stroke={COLORS.accent}
+          strokeWidth={4.5}
           strokeLinecap="round"
-          style={{ filter: `drop-shadow(0 0 16px ${accent})` }}
+          style={{ filter: `drop-shadow(0 0 6px ${COLORS.accent}66)` }}
         />
       )}
 
@@ -170,13 +161,13 @@ export const Globe: React.FC<{
           <circle
             cx={originPos[0]}
             cy={originPos[1]}
-            r={16 * pulse}
+            r={14}
             fill="none"
-            stroke={accent}
-            strokeWidth={3}
-            opacity={0.6}
+            stroke={COLORS.accent}
+            strokeWidth={2}
+            opacity={0.45}
           />
-          <circle cx={originPos[0]} cy={originPos[1]} r={11} fill={accent} />
+          <circle cx={originPos[0]} cy={originPos[1]} r={7.5} fill={COLORS.accent} />
         </g>
       )}
 
@@ -186,18 +177,17 @@ export const Globe: React.FC<{
           <circle
             cx={destPos[0]}
             cy={destPos[1]}
-            r={arrived ? 20 * pulse : 13}
+            r={14}
             fill="none"
-            stroke="white"
-            strokeWidth={3.5}
-            opacity={arrived ? 0.9 : 0.55}
+            stroke="rgba(255,255,255,0.8)"
+            strokeWidth={2}
+            opacity={arrived ? 0.9 : 0.4}
           />
           <circle
             cx={destPos[0]}
             cy={destPos[1]}
-            r={11}
-            fill={arrived ? "white" : "rgba(255,255,255,0.55)"}
-            style={arrived ? { filter: "drop-shadow(0 0 18px white)" } : undefined}
+            r={7.5}
+            fill={arrived ? "white" : "rgba(255,255,255,0.5)"}
           />
         </g>
       )}
@@ -206,16 +196,23 @@ export const Globe: React.FC<{
       {planePos && !arrived && (
         <g
           transform={`translate(${planePos[0]}, ${planePos[1]}) rotate(${planeAngle + 90})`}
-          style={{ filter: "drop-shadow(0 0 14px rgba(255,255,255,0.9))" }}
+          style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.6))" }}
         >
-          <g transform="translate(-32, -32)">
-            <PlaneIcon size={64} color="white" />
+          <g transform="translate(-26, -26)">
+            <PlaneIcon size={52} color="#E8EAF0" />
           </g>
         </g>
       )}
 
-      {/* Atmósfera */}
-      <circle cx={size / 2} cy={size / 2} r={size / 2 - 4} fill="url(#atmo)" />
+      {/* Sombra interior del limbo */}
+      <circle
+        cx={size / 2}
+        cy={size / 2}
+        r={size / 2 - 3}
+        fill="none"
+        stroke="rgba(255,255,255,0.14)"
+        strokeWidth={1.5}
+      />
     </svg>
   );
 };
