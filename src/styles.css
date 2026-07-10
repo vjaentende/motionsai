@@ -1409,7 +1409,7 @@ footer {
   }
 
   .scene-instructions {
-    top: 305px;
+    display: none;
   }
 
   .object-card {
