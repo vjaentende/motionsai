@@ -240,6 +240,10 @@ const Intro: React.FC<{modelName: string}> = ({modelName}) => {
 
 const TitleScene: React.FC<{tagline: string}> = ({tagline}) => {
   const frame = useCurrentFrame();
+  const taglineBreak = ' de la luz';
+  const hasCinematicBreak = tagline.includes(taglineBreak);
+  const lead = hasCinematicBreak ? tagline.replace(taglineBreak, '') : tagline;
+  const ending = hasCinematicBreak ? 'de la luz' : null;
   const lineWidth = interpolate(frame, [34, 85], [0, 610], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
@@ -288,14 +292,20 @@ const TitleScene: React.FC<{tagline: string}> = ({tagline}) => {
         <div
           style={{
             ...reveal(frame, 15, 110),
-            fontSize: 128,
+            fontSize: 113,
             lineHeight: 0.94,
             fontWeight: 760,
             letterSpacing: '-.072em',
             maxWidth: 1180,
           }}
         >
-          {tagline.split(' ').slice(0, 4).join(' ')}
+          {lead}
+          {ending ? (
+            <>
+              <br />
+              {ending}
+            </>
+          ) : null}
           <span style={{color: C.gold}}>.</span>
         </div>
         <div
