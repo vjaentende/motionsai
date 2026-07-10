@@ -1,0 +1,30 @@
+{
+  "name": "gpt-sol-launch-film",
+  "version": "1.0.0",
+  "description": "Cinematic Remotion launch film for GPT-5.6 SOL",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "remotion studio src/index.ts",
+    "preview": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts GPTSolLaunch out/gpt-sol-launch.mp4",
+    "render:still": "remotion still src/index.ts GPTSolLaunch out/gpt-sol-poster.png --frame=975",
+    "check": "remotion compositions src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vjaentende/motionsai.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vjaentende/motionsai/issues"
+  },
+  "homepage": "https://github.com/vjaentende/motionsai#readme",
+  "dependencies": {
+    "@remotion/cli": "^4.0.487",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "remotion": "^4.0.487"
+  }
+}
