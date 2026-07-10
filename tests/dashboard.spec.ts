@@ -23,6 +23,7 @@ test('creates and persists a new project', async ({page}) => {
   await expect(page.getByText('Project created successfully')).toBeVisible();
   await expect(page.getByRole('heading', {name: 'Brand identity system'})).toBeVisible();
   await page.reload();
+  await page.getByRole('button', {name: 'Projects', exact: true}).click();
   await expect(page.getByRole('heading', {name: 'Brand identity system'})).toBeVisible();
 });
 
