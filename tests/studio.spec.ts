@@ -16,8 +16,9 @@ test('renders the WebGL playground and interactive controls', async ({page}) => 
 test('opens and closes a project case study', async ({page}) => {
   await page.goto('/');
   await page.locator('.project-tile').first().click();
-  await expect(page.getByRole('dialog', {name: 'NOMA LABS'})).toBeVisible();
-  await expect(page.getByRole('heading', {name: 'A softer kind of future'})).toBeVisible();
+  const dialog = page.getByRole('dialog', {name: 'NOMA LABS'});
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole('heading', {name: 'A softer kind of future'})).toBeVisible();
   await page.getByRole('button', {name: 'Close project'}).click();
   await expect(page.getByRole('dialog', {name: 'NOMA LABS'})).not.toBeVisible();
 });
