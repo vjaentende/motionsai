@@ -1,0 +1,4 @@
+assets/source/
+build/
+output/*_silent.mp4
+*.wav
