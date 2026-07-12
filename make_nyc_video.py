@@ -387,7 +387,7 @@ def mux_audio(video: Path, audio: Path, destination: Path) -> None:
             "-b:a",
             "192k",
             "-af",
-            "loudnorm=I=-12:TP=-1.2:LRA=6,afade=t=out:st=18.7:d=1.2",
+            "loudnorm=I=-12:TP=-1.2:LRA=6,aresample=48000,afade=t=out:st=18.7:d=1.2",
             "-shortest",
             "-metadata",
             "title=NYC // 2026",
