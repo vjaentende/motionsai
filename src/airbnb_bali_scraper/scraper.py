@@ -21,7 +21,7 @@ LOGGER = logging.getLogger(__name__)
 DEFAULT_SEARCH_URL = "https://www.airbnb.com/bali-indonesia/stays/villas"
 FALLBACK_SEARCH_URLS = (
     "https://www.airbnb.com/ubud-indonesia/stays/villas",
-    "https://www.airbnb.com/canggu-indonesia/stays/villas",
+    "https://www.airbnb.com/kuta-indonesia/stays/villas",
 )
 IMAGE_EXTENSIONS = {
     "image/avif": ".avif",
