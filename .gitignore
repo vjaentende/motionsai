@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+dist/
+build/
+*.egg-info/
+
+# El contenido descargado puede ser grande y sus derechos pertenecen a sus autores.
+villas/*
+!villas/.gitkeep

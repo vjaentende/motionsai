@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "airbnb-bali-scraper"
+version = "0.1.0"
+description = "Descarga nombres, descripciones y fotos de villas públicas de Airbnb en Bali"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "scrapling[fetchers]>=0.4.11",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.scripts]
+scrape-bali-villas = "airbnb_bali_scraper.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
