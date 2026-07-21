@@ -19,6 +19,10 @@ from .parser import extract_listing_urls, parse_villa
 
 LOGGER = logging.getLogger(__name__)
 DEFAULT_SEARCH_URL = "https://www.airbnb.com/bali-indonesia/stays/villas"
+FALLBACK_SEARCH_URLS = (
+    "https://www.airbnb.com/ubud-indonesia/stays/villas",
+    "https://www.airbnb.com/canggu-indonesia/stays/villas",
+)
 IMAGE_EXTENSIONS = {
     "image/avif": ".avif",
     "image/gif": ".gif",
@@ -110,9 +114,22 @@ class AirbnbBaliScraper:
         )
 
     def discover(self, candidate_limit: int) -> list[str]:
-        LOGGER.info("Buscando fichas públicas en %s", self.search_url)
-        page = self._fetch(self.search_url, _search_action)
-        urls = extract_listing_urls(page)
+        search_urls = [self.search_url]
+        if self.search_url == DEFAULT_SEARCH_URL:
+            search_urls.extend(FALLBACK_SEARCH_URLS)
+
+        urls: list[str] = []
+        seen: set[str] = set()
+        for search_url in search_urls:
+            LOGGER.info("Buscando fichas públicas en %s", search_url)
+            page = self._fetch(search_url, _search_action)
+            for url in extract_listing_urls(page):
+                listing_id = url.rsplit("/", 1)[-1]
+                if listing_id not in seen:
+                    seen.add(listing_id)
+                    urls.append(url)
+            if len(urls) >= candidate_limit:
+                break
         if not urls:
             raise RuntimeError(
                 "Airbnb no devolvió enlaces. Puede haber presentado un captcha o "
@@ -122,10 +139,19 @@ class AirbnbBaliScraper:
 
     def run(self, limit: int = 15) -> list[Villa]:
         self.output_dir.mkdir(parents=True, exist_ok=True)
-        villas: list[Villa] = []
-        for url in self.discover(max(limit * 4, limit)):
+        villas = self._load_existing_villas(limit)
+        existing_ids = {villa.listing_id for villa in villas}
+        if villas:
+            LOGGER.info("Reanudando con %d villas ya guardadas", len(villas))
+        if len(villas) >= limit:
+            self._write_manifest(villas)
+            return villas
+        for url in self.discover(max(limit + 10, limit)):
             if len(villas) >= limit:
                 break
+            listing_id = url.rsplit("/", 1)[-1]
+            if listing_id in existing_ids:
+                continue
             if villas or self.delay:
                 time.sleep(self.delay)
             LOGGER.info("Procesando %s", url)
@@ -142,10 +168,33 @@ class AirbnbBaliScraper:
                 continue
             self._save_villa(villa)
             villas.append(villa)
+            existing_ids.add(villa.listing_id)
 
         self._write_manifest(villas)
         if len(villas) < limit:
             LOGGER.warning("Se guardaron %d de las %d villas solicitadas", len(villas), limit)
+        return villas
+
+    def _load_existing_villas(self, limit: int) -> list[Villa]:
+        villas: list[Villa] = []
+        for metadata_path in sorted(self.output_dir.glob("*/metadata.json")):
+            try:
+                data = json.loads(metadata_path.read_text(encoding="utf-8"))
+                villa = Villa(
+                    listing_id=str(data["listing_id"]),
+                    source_url=str(data["source_url"]),
+                    name=str(data["name"]),
+                    description=str(data["description"]),
+                    photo_urls=[str(url) for url in data["photo_urls"]],
+                    has_video=bool(data.get("has_video", False)),
+                )
+            except (KeyError, OSError, TypeError, ValueError, json.JSONDecodeError):
+                LOGGER.warning("Metadatos existentes no válidos: %s", metadata_path)
+                continue
+            if not villa.has_video and villa.photo_urls:
+                villas.append(villa)
+            if len(villas) >= limit:
+                break
         return villas
 
     def _save_villa(self, villa: Villa) -> None:

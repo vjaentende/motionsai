@@ -1,5 +1,7 @@
+import json
+
 from airbnb_bali_scraper.parser import extract_listing_urls, parse_villa
-from airbnb_bali_scraper.scraper import safe_folder_name
+from airbnb_bali_scraper.scraper import AirbnbBaliScraper, safe_folder_name
 
 
 class Result:
@@ -95,3 +97,26 @@ def test_parse_villa_detects_video_and_safe_folder_removes_symbols():
 
     assert villa.has_video is True
     assert safe_folder_name("Villa / Mar 🌊", "42") == "Villa Mar [42]"
+
+
+def test_existing_downloads_can_be_resumed(tmp_path):
+    folder = tmp_path / "Villa Sol [987]"
+    folder.mkdir()
+    (folder / "metadata.json").write_text(
+        json.dumps(
+            {
+                "listing_id": "987",
+                "source_url": "https://www.airbnb.com/rooms/987",
+                "name": "Villa Sol",
+                "description": "Descripción de la villa",
+                "photo_urls": ["https://a0.muscache.com/im/pictures/987/a.jpg"],
+                "has_video": False,
+                "downloaded_photos": ["001.jpg"],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    scraper = AirbnbBaliScraper(tmp_path)
+
+    assert [villa.listing_id for villa in scraper._load_existing_villas(15)] == ["987"]
