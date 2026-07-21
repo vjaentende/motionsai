@@ -5,6 +5,7 @@ import logging
 import mimetypes
 import os
 import re
+import shutil
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict
@@ -150,6 +151,8 @@ class AirbnbBaliScraper:
     def _save_villa(self, villa: Villa) -> None:
         folder = self.output_dir / safe_folder_name(villa.name, villa.listing_id)
         photos_dir = folder / "photos"
+        if photos_dir.exists():
+            shutil.rmtree(photos_dir)
         photos_dir.mkdir(parents=True, exist_ok=True)
         (folder / "description.txt").write_text(
             f"{villa.name}\n\n{villa.description}\n\nFuente: {villa.source_url}\n",

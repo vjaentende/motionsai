@@ -59,7 +59,9 @@ def test_parse_villa_uses_structured_data_and_only_photo_media():
                 "https://a0.muscache.com/im/pictures/abc/one.jpeg?im_w=320"
             ],
             "img::attr(src)": [
-                "https://a0.muscache.com/im/pictures/abc/two.webp?im_w=320"
+                "https://a0.muscache.com/im/pictures/abc/two.webp?im_w=320",
+                "https://a0.muscache.com/im/pictures/user/User/original/avatar.jpeg",
+                "https://a0.muscache.com/im/pictures/AirbnbPlatformAssets/icon.png",
             ],
             "img::attr(srcset)": [],
             "video::attr(src)": [],

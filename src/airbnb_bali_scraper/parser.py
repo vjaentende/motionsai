@@ -3,6 +3,7 @@ from __future__ import annotations
 import html
 import json
 import re
+from base64 import urlsafe_b64decode
 from collections.abc import Iterable, Iterator
 from typing import Any
 from urllib.parse import parse_qsl, urlencode, urljoin, urlsplit, urlunsplit
@@ -13,10 +14,17 @@ AIRBNB_ORIGIN = "https://www.airbnb.com"
 ROOM_RE = re.compile(r"(?:https?://(?:www\.)?airbnb\.[^/]+)?/rooms/(\d+)")
 URL_RE = re.compile(r"https?://[^\s\"'<>\\]+", re.IGNORECASE)
 VIDEO_RE = re.compile(
-    r"(?:\.m3u8|\.mp4|\.mov|\.webm|/video(?:s)?/)(?:[?&#/]|$)", re.IGNORECASE
+    r"(?:\.m3u8|\.mp4|\.mov|\.webm|/video(?:s)?/)(?:[?&#/\s\"']|$)",
+    re.IGNORECASE,
 )
 PHOTO_HOSTS = ("muscache.com", "airbnb.com")
 PHOTO_PATH_MARKERS = ("/im/pictures/", "/pictures/", "/picture/")
+NON_LISTING_PATHS = (
+    "/airbnbplatformassets",
+    "/airbnb-platform-assets/",
+    "/mediaverse/",
+    "/user/",
+)
 DESCRIPTION_KEYS = {
     "description",
     "listingdescription",
@@ -81,16 +89,34 @@ def _canonical_photo_url(raw_url: str) -> str | None:
         or not any(host.endswith(domain) for domain in PHOTO_HOSTS)
         or not any(marker in path for marker in PHOTO_PATH_MARKERS)
         or VIDEO_RE.search(url)
+        or any(marker in path for marker in NON_LISTING_PATHS)
     ):
         return None
 
     # Conserva parámetros no relacionados con el redimensionado de Airbnb.
     query = urlencode(
-        (key, value)
-        for key, value in parse_qsl(parts.query)
-        if key not in {"im_w", "im_h", "im_q", "im_format"}
+        [
+            (key, value)
+            for key, value in parse_qsl(parts.query)
+            if key not in {"im_w", "im_h", "im_q", "im_format"}
+        ]
     )
     return urlunsplit(("https", parts.netloc, parts.path, query, ""))
+
+
+def _belongs_to_listing(url: str, listing_id: str) -> bool:
+    if listing_id in url:
+        return True
+    match = re.search(r"/Hosting-([^/]+)/original/", url, re.IGNORECASE)
+    if not match:
+        return False
+    encoded = match.group(1)
+    try:
+        padding = "=" * (-len(encoded) % 4)
+        decoded = urlsafe_b64decode(encoded + padding).decode("utf-8")
+    except (ValueError, UnicodeDecodeError):
+        return False
+    return listing_id in decoded
 
 
 def extract_listing_urls(page: Any, base_url: str = AIRBNB_ORIGIN) -> list[str]:
@@ -163,6 +189,11 @@ def parse_villa(page: Any, source_url: str) -> Villa:
     ]
     room_match = ROOM_RE.search(source_url)
     listing_id = room_match.group(1) if room_match else "unknown"
+    listing_photos = [
+        photo for photo in photos if _belongs_to_listing(photo, listing_id)
+    ]
+    if listing_photos:
+        photos = listing_photos
     combined_markup = "\n".join([*_values(page, "video::attr(src)"), *decoded_scripts])
 
     return Villa(
