@@ -1,0 +1,38 @@
+[
+  {
+    "folder": "villa_01_833666182539293390",
+    "listing_id": "833666182539293390",
+    "source_url": "https://www.airbnb.com/rooms/833666182539293390",
+    "photos": [
+      "01.jpg",
+      "02.jpg",
+      "03.jpg",
+      "04.jpg",
+      "05.jpg"
+    ]
+  },
+  {
+    "folder": "villa_02_22498120",
+    "listing_id": "22498120",
+    "source_url": "https://www.airbnb.com/rooms/22498120",
+    "photos": [
+      "01.jpg",
+      "02.jpg",
+      "03.jpg",
+      "04.jpg",
+      "05.jpg"
+    ]
+  },
+  {
+    "folder": "villa_03_29520527",
+    "listing_id": "29520527",
+    "source_url": "https://www.airbnb.com/rooms/29520527",
+    "photos": [
+      "01.jpg",
+      "02.jpg",
+      "03.jpg",
+      "04.jpg",
+      "05.jpg"
+    ]
+  }
+]
