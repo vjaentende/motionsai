@@ -1,0 +1,7 @@
+Carpeta airbnbPIC (vista previa)
+
+1. Descarga este ZIP del PR o del branch.
+2. En tu Mac:
+   unzip ~/Downloads/airbnbPIC-preview.zip -d ~/Desktop/
+   mv ~/Desktop/airbnbPIC-preview ~/Desktop/airbnbPIC
+3. Abre ~/Desktop/airbnbPIC/index.html en el navegador.
