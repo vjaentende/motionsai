@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GIRO — Decision Roulette</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="atmosphere" aria-hidden="true"></div>
+
+    <main class="shell">
+      <header class="brand-block">
+        <p class="brand">GIRO</p>
+        <h1>Spin your options. Let chance decide.</h1>
+        <p class="lede">
+          Add choices, hit the wheel, and watch it land on one answer.
+        </p>
+      </header>
+
+      <section class="stage" aria-label="Roulette stage">
+        <div class="wheel-wrap">
+          <div class="pointer" aria-hidden="true"></div>
+          <canvas id="wheel" width="640" height="640" role="img" aria-label="Roulette wheel"></canvas>
+          <button id="spinBtn" class="spin-btn" type="button">SPIN</button>
+        </div>
+
+        <p id="result" class="result" aria-live="polite">Add options, then spin.</p>
+      </section>
+
+      <section class="controls" aria-label="Options">
+        <form id="optionForm" class="option-form">
+          <label for="optionInput">Your options</label>
+          <div class="input-row">
+            <input
+              id="optionInput"
+              name="option"
+              type="text"
+              maxlength="40"
+              placeholder="Type an option and press Enter"
+              autocomplete="off"
+            />
+            <button type="submit">Add</button>
+          </div>
+        </form>
+
+        <ul id="optionList" class="option-list"></ul>
+
+        <div class="control-actions">
+          <button id="shuffleBtn" type="button" class="ghost">Shuffle</button>
+          <button id="clearBtn" type="button" class="ghost danger">Clear all</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>
