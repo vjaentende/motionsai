@@ -1,0 +1,417 @@
+:root {
+  --ink: #071912;
+  --felt: #0f3d2c;
+  --felt-deep: #062218;
+  --brass: #d9a441;
+  --brass-soft: #f0d08a;
+  --coral: #e4573d;
+  --cream: #f3ebe0;
+  --cream-dim: rgba(243, 235, 224, 0.72);
+  --line: rgba(243, 235, 224, 0.16);
+  --panel: rgba(7, 25, 18, 0.55);
+  --ok: #7dcea0;
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  --radius: 18px;
+  --font-display: "Syne", sans-serif;
+  --font-body: "IBM Plex Sans", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  color: var(--cream);
+  font-family: var(--font-body);
+  background: var(--ink);
+  overflow-x: hidden;
+}
+
+.atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 80% 55% at 70% 15%, rgba(217, 164, 65, 0.18), transparent 55%),
+    radial-gradient(ellipse 60% 50% at 15% 80%, rgba(228, 87, 61, 0.14), transparent 50%),
+    linear-gradient(160deg, #0a2a1d 0%, #071912 45%, #123528 100%);
+}
+
+.atmosphere::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.18;
+  background-image:
+    linear-gradient(rgba(243, 235, 224, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(243, 235, 224, 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(circle at center, black 35%, transparent 85%);
+}
+
+.shell {
+  width: min(1120px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 2.5rem 0 4rem;
+  display: grid;
+  gap: 2rem;
+}
+
+.brand-block {
+  max-width: 34rem;
+  animation: rise 0.8s ease both;
+}
+
+.brand {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(3.4rem, 9vw, 5.8rem);
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  color: var(--brass-soft);
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.25);
+}
+
+.brand-block h1 {
+  margin: 0.85rem 0 0.55rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 3vw, 1.85rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.lede {
+  margin: 0;
+  color: var(--cream-dim);
+  font-size: 1.05rem;
+  max-width: 32ch;
+}
+
+.stage {
+  display: grid;
+  justify-items: center;
+  gap: 1.25rem;
+  animation: rise 0.9s ease 0.08s both;
+}
+
+.wheel-wrap {
+  position: relative;
+  width: min(100%, 420px);
+  aspect-ratio: 1;
+  filter: drop-shadow(var(--shadow));
+}
+
+#wheel {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 42%, #18553d, var(--felt-deep) 70%);
+  border: 10px solid #8d6a24;
+  box-shadow:
+    inset 0 0 0 6px rgba(240, 208, 138, 0.35),
+    inset 0 0 40px rgba(0, 0, 0, 0.35);
+}
+
+.pointer {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  z-index: 3;
+  width: 0;
+  height: 0;
+  transform: translateX(-50%);
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-top: 34px solid var(--coral);
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.35));
+  transform-origin: 50% 0;
+  animation: nudge 2.8s ease-in-out infinite;
+}
+
+.spin-btn {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  z-index: 4;
+  width: 92px;
+  height: 92px;
+  transform: translate(-50%, -50%);
+  border: 3px solid var(--brass-soft);
+  border-radius: 50%;
+  background: linear-gradient(160deg, #f2d48a, #c48720);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  box-shadow: 0 8px 0 #7a5310, 0 14px 24px rgba(0, 0, 0, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+.spin-btn:hover:not(:disabled) {
+  transform: translate(-50%, -52%);
+  filter: brightness(1.05);
+}
+
+.spin-btn:active:not(:disabled) {
+  transform: translate(-50%, -48%);
+  box-shadow: 0 4px 0 #7a5310, 0 8px 16px rgba(0, 0, 0, 0.35);
+}
+
+.spin-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  filter: grayscale(0.2);
+}
+
+.result {
+  min-height: 1.6em;
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 3vw, 1.7rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.result.winner {
+  color: var(--brass-soft);
+  animation: pop 0.55s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+
+.controls {
+  width: min(520px, 100%);
+  margin: 0 auto;
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  backdrop-filter: blur(10px);
+  animation: rise 1s ease 0.14s both;
+}
+
+.option-form label {
+  display: block;
+  margin-bottom: 0.55rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.input-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.6rem;
+}
+
+.input-row input,
+.input-row button,
+.ghost {
+  font: inherit;
+}
+
+.input-row input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--cream);
+  outline: none;
+}
+
+.input-row input:focus {
+  border-color: rgba(217, 164, 65, 0.7);
+  box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.15);
+}
+
+.input-row button {
+  min-height: 48px;
+  padding: 0 1.1rem;
+  border: 0;
+  border-radius: 12px;
+  background: var(--coral);
+  color: #fff8f4;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.input-row button:hover {
+  filter: brightness(1.06);
+}
+
+.option-list {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+  max-height: 220px;
+  overflow: auto;
+}
+
+.option-list:empty::after {
+  content: "No options yet. Add at least two to spin.";
+  display: block;
+  color: var(--cream-dim);
+  font-size: 0.95rem;
+}
+
+.option-list li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid transparent;
+}
+
+.option-list li.highlight {
+  border-color: rgba(217, 164, 65, 0.55);
+  background: rgba(217, 164, 65, 0.12);
+}
+
+.swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.option-list span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.option-list button {
+  border: 0;
+  background: transparent;
+  color: var(--cream-dim);
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.2rem 0.35rem;
+}
+
+.option-list button:hover {
+  color: var(--coral);
+}
+
+.control-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.ghost {
+  min-height: 40px;
+  padding: 0 0.9rem;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--cream);
+  cursor: pointer;
+}
+
+.ghost:hover {
+  border-color: rgba(243, 235, 224, 0.35);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.ghost.danger:hover {
+  border-color: rgba(228, 87, 61, 0.5);
+  color: #ffb4a6;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes nudge {
+  0%,
+  100% {
+    transform: translateX(-50%) rotate(0deg);
+  }
+  50% {
+    transform: translateX(-50%) rotate(-8deg);
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.86);
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (min-width: 900px) {
+  .shell {
+    grid-template-columns: 1fr 1.1fr;
+    grid-template-areas:
+      "brand stage"
+      "controls stage";
+    align-items: start;
+    column-gap: 2.5rem;
+    padding-top: 3.5rem;
+  }
+
+  .brand-block {
+    grid-area: brand;
+  }
+
+  .stage {
+    grid-area: stage;
+    position: sticky;
+    top: 1.5rem;
+  }
+
+  .controls {
+    grid-area: controls;
+    width: 100%;
+    margin: 0;
+  }
+
+  .wheel-wrap {
+    width: min(100%, 460px);
+  }
+}
+
+@media (max-width: 520px) {
+  .shell {
+    width: min(100% - 1.25rem, 1120px);
+    padding-top: 1.5rem;
+  }
+
+  .spin-btn {
+    width: 78px;
+    height: 78px;
+    font-size: 1rem;
+  }
+
+  .input-row {
+    grid-template-columns: 1fr;
+  }
+}
